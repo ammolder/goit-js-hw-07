@@ -29,9 +29,24 @@ function onLinkContainerClick(e) {
     return;
   }
 
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
     <img src=${e.target.dataset.source}>
-`);
+`,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", onClosesOnEsc);
+      },
+      onClose: () => {
+        document.removeEventListener("keydown", onClosesOnEsc);
+      },
+    }
+  );
 
+  function onClosesOnEsc(e) {
+    if (e.code === "Escape") {
+      instance.close();
+    }
+  }
   instance.show();
 }
